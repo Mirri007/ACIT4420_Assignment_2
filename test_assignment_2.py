@@ -89,6 +89,33 @@ class AssignmentTwoWorkflowTests(unittest.TestCase):
             self.assertIn("FIT-2026-009", summary_text)
             self.assertIn("fitness_sessions.csv: row 2; field csv", rejected_text)
 
+    def test_missing_optional_invalid_session_file_is_ignored(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            profiles = root / "participants.csv"
+            sessions = root / "fitness_sessions.csv"
+            output = root / "output"
+            self._write_csv(
+                profiles,
+                ["participant_id", "name", "baseline_heart_rate", "baseline_skin_response", "baseline_temperature"],
+                [["P001", "Amina Noor", "68", "1.20", "32.4"]],
+            )
+            self._write_csv(
+                sessions,
+                ["session_id", "participant_id", "timestamp", "heart_rate", "skin_response", "temperature", "activity_level", "signal_quality"],
+                [
+                    ["FIT-2026-001", "P001", "0", "68", "1.2", "32.4", "0.08", "0.98"],
+                    ["FIT-2026-001", "P001", "1", "69", "1.2", "32.4", "0.08", "0.98"],
+                    ["FIT-2026-001", "P001", "2", "67", "1.2", "32.4", "0.08", "0.98"],
+                ],
+            )
+
+            accepted, rejected, _ = analyze_files(profiles, sessions, None, output)
+
+            self.assertEqual((accepted, rejected), (3, 0))
+            rejected_text = (output / "rejected_records.txt").read_text(encoding="utf-8")
+            self.assertIn("No records were rejected.", rejected_text)
+
     @staticmethod
     def _write_csv(path, header, rows):
         with open(path, "w", encoding="utf-8", newline="") as csv_file:

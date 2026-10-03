@@ -54,7 +54,7 @@ def _invalid_sessions_path(sessions_path: str | Path):
 def analyze_files(
     profiles_path: str | Path,
     sessions_path: str | Path,
-    invalid_sessions_path: str | Path,
+    invalid_sessions_path: str | Path | None,
     output_path: str | Path,
 ):
     """Load both session files, analyze every identifiable session and write reports."""
@@ -62,9 +62,12 @@ def analyze_files(
     valid_rows, valid_file_rejections = _load_session_file(
         sessions_path, set(participants)
     )
-    invalid_rows, invalid_file_rejections = _load_session_file(
-        invalid_sessions_path, set(participants)
-    )
+    if invalid_sessions_path is None:
+        invalid_rows, invalid_file_rejections = [], []
+    else:
+        invalid_rows, invalid_file_rejections = _load_session_file(
+            invalid_sessions_path, set(participants)
+        )
     rejected_records = (
         profile_rejections + valid_file_rejections + invalid_file_rejections
     )
