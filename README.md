@@ -1,5 +1,10 @@
 # Smart Fitness Session Analyzer
 
+Selected option: Option A - Smart Fitness Session Analyzer
+
+- Student name: Miriam Throndsen
+- Student number: 409902
+
 This program builds on the fitness analyzer from Assignment I. It reads participant and fitness data from CSV files, checks the records, classifies each session, and explains the result.
 
 ## Run the program
