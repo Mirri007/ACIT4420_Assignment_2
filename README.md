@@ -87,7 +87,6 @@ The input CSV files are not changed. Rows without a valid session ID or a known 
 
 - The classification thresholds are simplified heuristics for simulated data. They have not been clinically validated and must not be used for health decisions.
 - A session with fewer than three usable observations cannot receive an activity classification.
-- This project implements Option A only. It does not analyze podcast recordings from Option B.
 - The program assumes that the participant baselines supplied in the profile file are accurate and representative.
 
 ## Tests
